@@ -247,7 +247,7 @@ function create() {
         const pad = this.physics.add.sprite(
             w*pos.x, h*pos.y, 'lilypad'
         )
-        .setScale(Phaser.Math.FloatBetween(0.2,0.35))
+        .setScale(Phaser.Math.FloatBetween(0.5,0.1))
         .setInteractive()
         .setDepth(2);
         lilypads.push(pad);
@@ -324,5 +324,6 @@ function showLevelSummary(){
     alert(`Level Complete!\nScore: ${score}`);
     window.location.reload();
 }
+
 
 
