@@ -1,14 +1,14 @@
 /*
 ========================================================================
-Program: The Adventures of Little Doug - Level 2
+Program: The Adventures of Little Doug - Level 2: Wetland Explorer
 Author: Douglas Fessler
-Date: 2026-01-25
+Date: 2026-02-09
 Description: 
     This is an educational interactive game using Phaser 3. The player 
-    explores a wetland environment, flips rocks to discover macroinvertebrates 
-    (bugs that indicate water quality) or trash items. Finding bugs 
-    increases the score, while trash reduces it. Players learn about 
-    stream ecology, pollution, and the importance of keeping waterways clean.
+    explores a wetland/pond environment, flips logs or mud clumps to discover 
+    macroinvertebrates (bugs, tadpoles, snails) or trash items. Finding critters 
+    increases the score, while trash reduces it. Players learn about wetland 
+    ecology, amphibians, and the importance of keeping wetlands clean.
 ========================================================================
 */
 
@@ -16,83 +16,133 @@ Description:
 // Phaser Config
 // -------------------------
 const config = {
-    type: Phaser.AUTO, // Phaser chooses WebGL or Canvas automatically
-    width: window.innerWidth, // Full browser width
-    height: window.innerHeight, // Full browser height
-    backgroundColor: '#6B8E6E', // Sky blue background
-    physics: { default: 'arcade', arcade: { debug: false } }, // Arcade physics engine, no debug
-    scene: { preload, create, update }, // Game lifecycle methods
-    scale: { mode: Phaser.Scale.RESIZE, autoCenter: Phaser.Scale.CENTER_BOTH } // Resize to fit window, center
+    type: Phaser.AUTO, 
+    width: window.innerWidth, 
+    height: window.innerHeight, 
+    backgroundColor: '#6B8E6E', // Muted wetland green
+    physics: { default: 'arcade', arcade: { debug: false } }, 
+    scene: { preload, create, update }, 
+    scale: { mode: Phaser.Scale.RESIZE, autoCenter: Phaser.Scale.CENTER_BOTH }
 };
 
-const game = new Phaser.Game(config); // Create the Phaser game
+const game = new Phaser.Game(config);
 
 // -------------------------
 // Globals
 // -------------------------
-let player, cursors; // Player sprite and keyboard input
-let rocks = [], envSprites = []; // Arrays for rocks and environment sprites
-let score = 0, scoreText; // Score and display text
-let titleText, titleBg; // Game title bar
-let rockFlipSound, ambientSound, trashSound; // Audio
+let player, cursors; 
+let rocks = [], envSprites = []; 
+let score = 0, scoreText; 
+let titleText, titleBg; 
+let rockFlipSound, ambientSound, trashSound; 
 
-let clickedCount = 0; // Tracks total rocks clicked
-let totalRocks = 18; // Rocks per level
-let collectedBugs = []; // Stores names of bugs found
-let flippedTrash = []; // Stores names of trash items found
+let clickedCount = 0; 
+let totalRocks = 10; // fewer rocks/logs in wetland
+let collectedBugs = []; 
+let flippedTrash = []; 
 
 // -------------------------
-// Macroinvertebrates Data
+// Wetland Macroinvertebrates & Critters
 // -------------------------
 const macroinvertebrates = [
-    { key: 'caddisfly', sprite: 'caddisfly.png', name: 'Caddisfly Larva', blurb: 'Caddisfly larvae often build protective cases from sand and twigs. They indicate clean water and help stabilize streambeds.' },
-    { key: 'hellgrammite', sprite: 'hellgrammite.png', name: 'Hellgrammite', blurb: 'Hellgrammites are fierce predators found in fast-moving, oxygen-rich streams. They feed on other invertebrates, helping maintain balance in aquatic ecosystems.' },
-    { key: 'mayfly', sprite: 'mayfly.png', name: 'Mayfly Nymph', blurb: 'Mayfly nymphs are very sensitive to pollution and signal excellent water quality. Their presence supports fish like trout and bass.' },
-    { key: 'crayfish', sprite: 'crayfish.png', name: 'Crayfish', blurb: 'Crayfish are scavengers that help clean streams by eating dead plants and animals. They are an important food source for fish and birds.' },
-    { key: 'stonefly', sprite: 'stonefly.png', name: 'Stonefly Nymph', blurb: 'Stonefly nymphs require high oxygen levels and fast-flowing water, making them excellent indicators of clean streams. They help control populations of other aquatic insects.' },
-    { key: 'dragonfly', sprite: 'dragonfly.png', name: 'Dragonfly Nymph', blurb: 'Dragonfly nymphs are predatory insects that help control mosquito populations in freshwater habitats. They are an important part of the food web.' },
-    { key: 'aquaticworm', sprite: 'aquaticworm.png', name: 'Aquatic Worm', blurb: 'Aquatic worms are detritivores, breaking down organic matter and recycling nutrients in streams. They improve water quality and provide food for fish.' }
+    {
+        key: 'dragonflyNymph',
+        sprite: 'dragonflyNymph.png',
+        name: 'Dragonfly Nymph',
+        blurb: 'Dragonfly nymphs live in still water and are powerful predators of mosquitoes. Their presence signals a healthy wetland.'
+    },
+    {
+        key: 'damselflyNymph',
+        sprite: 'damselflyNymph.png',
+        name: 'Damselfly Nymph',
+        blurb: 'Damselfly nymphs are common in ponds and marshes. They are sensitive to pollution and help maintain insect balance.'
+    },
+    {
+        key: 'divingBeetle',
+        sprite: 'divingBeetle.png',
+        name: 'Diving Beetle',
+        blurb: 'Diving beetles are strong swimmers that trap air bubbles to breathe underwater. They are important wetland predators.'
+    },
+    {
+        key: 'waterBoatman',
+        sprite: 'waterBoatman.png',
+        name: 'Water Boatman',
+        blurb: 'Water boatmen swim upside down and feed on algae and small organisms, helping recycle nutrients in wetlands.'
+    },
+    {
+        key: 'snail',
+        sprite: 'snail.png',
+        name: 'Freshwater Snail',
+        blurb: 'Freshwater snails graze on algae and plant material, helping keep wetland waters clear.'
+    },
+    {
+        key: 'tadpole',
+        sprite: 'tadpole.png',
+        name: 'Tadpole',
+        blurb: 'Tadpoles are young frogs and toads. Wetlands provide critical nursery habitat for amphibians.'
+    }
 ];
 
 // -------------------------
-// Trash Data
+// Wetland Trash Items (20% chance)
 // -------------------------
 const trashItems = [
-    { key: 'plastic', sprite: 'plastic.png', name: 'Plastic Bottle', blurb: 'Plastic trash harms aquatic life, pollutes streams, and can break down into microplastics that enter the food chain.', points: -5 },
-    { key: 'can', sprite: 'can.png', name: 'Aluminum Can', blurb: 'Litter left on land often ends up in waterways. Recycling cans helps conserve resources and protect wildlife.', points: -5 },
-    { key: 'glass', sprite: 'glass.png', name: 'Broken Glass', blurb: 'Broken glass can injure wildlife and people exploring the stream. Glass does not degrade quickly and can stay in the environment for decades.', points: -4 },
-    { key: 'tire', sprite: 'tire.png', name: 'Tire', blurb: 'Tires leach chemicals into water, block natural stream flow, and create hazards for fish and other aquatic life.', points: -8 },
-    { key: 'cigarette', sprite: 'cigarette.png', name: 'Cigarette Butt', blurb: 'Cigarette butts leach toxic chemicals and are harmful to fish and wildlife. Even one butt can contaminate a liter of water.', points: -3 },
-    { key: 'styrofoam', sprite: 'styrofoam.png', name: 'Styrofoam', blurb: 'Styrofoam breaks into tiny pieces that are ingested by wildlife and never fully biodegrade, persisting in the environment for centuries.', points: -6 },
-    { key: 'fishingLine', sprite: 'fishingLine.png', name: 'Fishing Line', blurb: 'Discarded fishing line can entangle fish, birds, and other wildlife, causing injury or death.', points: -7 }
+    {
+        key: 'plasticBag',
+        sprite: 'plasticBag.png',
+        name: 'Plastic Bag',
+        blurb: 'Plastic bags can smother wetland plants and trap wildlife, especially in still water.',
+        points: -6
+    },
+    {
+        key: 'foamCup',
+        sprite: 'foamCup.png',
+        name: 'Foam Cup',
+        blurb: 'Foam products break into tiny pieces that persist in wetlands and are often eaten by wildlife.',
+        points: -5
+    },
+    {
+        key: 'fishingLine',
+        sprite: 'fishingLine.png',
+        name: 'Fishing Line',
+        blurb: 'Discarded fishing line can entangle birds, turtles, and amphibians in wetland habitats.',
+        points: -7
+    },
+    {
+        key: 'oilSheen',
+        sprite: 'oilSheen.png',
+        name: 'Oil Residue',
+        blurb: 'Oil pollution blocks oxygen exchange and poisons wetland organisms.',
+        points: -8
+    }
 ];
 
 // -------------------------
-// Environment Data (bushes only)
+// Wetland Vegetation (replaces bushes)
 // -------------------------
-const bushes = [
-    { key: 'bush', x: 0.85, y: 0.2, scale: 0.3 },
-    { key: 'bush', x: 0.75, y: 0.85, scale: 0.3 },
-    { key: 'bush', x: 0.4, y: 0.7, scale: 0.3 },
-    { key: 'bush', x: 0.2, y: 0.4, scale: 0.3 }
+const vegetation = [
+    { key: 'cattail', x: 0.85, y: 0.25, scale: 0.35 },
+    { key: 'cattail', x: 0.75, y: 0.85, scale: 0.35 },
+    { key: 'reeds', x: 0.4, y: 0.7, scale: 0.4 },
+    { key: 'grass', x: 0.2, y: 0.4, scale: 0.3 }
 ];
 
 // -------------------------
 // Preload
 // -------------------------
 function preload() {
-    // Load images
     this.load.image('player', 'player.png');
-    this.load.image('rock', 'rock.png');
-    this.load.image('tree', 'tree.png');
-    bushes.forEach(b => this.load.image(b.key, b.key + '.png')); // bushes
-    macroinvertebrates.forEach(critter => this.load.image(critter.key, critter.sprite)); // bugs
-    trashItems.forEach(t => this.load.image(t.key, t.sprite)); // trash
+    this.load.image('rock', 'rock.png'); // still “rock” for interactivity
+    this.load.image('tree', 'tree.png'); 
 
-    // Load sounds
-    this.load.audio('rockFlip', 'rockFlip.wav'); // rock flip
-    this.load.audio('ambientWater', 'ambientWater.wav'); // looping background water
-    this.load.audio('trashSound', 'trash.wav'); // trash noise
+    vegetation.forEach(v => this.load.image(v.key, v.key + '.png')); 
+    macroinvertebrates.forEach(c => this.load.image(c.key, c.sprite));
+    trashItems.forEach(t => this.load.image(t.key, t.sprite));
+
+    // Sounds
+    this.load.audio('rockFlip', 'rockFlip.wav');
+    this.load.audio('ambientWetland', 'wetlandAmbience.wav'); // optional wetland ambient
+    this.load.audio('trashSound', 'trash.wav');
 }
 
 // -------------------------
@@ -104,14 +154,14 @@ function create() {
 
     // Title Bar
     titleBg = this.add.rectangle(w/2, 0, w, 40, 0x000000, 0.4).setOrigin(0.5,0).setDepth(10);
-    titleText = this.add.text(w/2, 8, 'The Adventures of Little Doug -Wetland Explorer', { font:'22px Arial', fill:'#fff', fontStyle:'bold' })
-        .setOrigin(0.5,0).setDepth(11);
+    titleText = this.add.text(w/2, 8, 'The Adventures of Little Doug — Wetland Explorer', 
+        { font:'22px Arial', fill:'#fff', fontStyle:'bold' }).setOrigin(0.5,0).setDepth(11);
 
     // Score Text
     scoreText = this.add.text(10, 50, 'Score: 0', { font:'18px Arial', fill:'#fff' }).setDepth(11);
 
-    // Add bushes
-    bushes.forEach(obj => {
+    // Add vegetation
+    vegetation.forEach(obj => {
         const sprite = this.add.image(w*obj.x, h*obj.y, obj.key).setScale(obj.scale).setDepth(1);
         envSprites.push(sprite);
     });
@@ -125,17 +175,17 @@ function create() {
         this.add.image(w * randX, h * 0.05, 'tree').setScale(scale).setDepth(depth);
     }
 
-    // Player sprite
+    // Player
     player = this.physics.add.sprite(w/2, h*0.8, 'player').setScale(0.5).setCollideWorldBounds(true).setDepth(2);
     cursors = this.input.keyboard.createCursorKeys();
 
     // Load sounds
     rockFlipSound = this.sound.add('rockFlip', { volume: 0.5 });
-    ambientSound = this.sound.add('ambientWater', { loop: true, volume: 0.3 });
+    ambientSound = this.sound.add('ambientWetland', { loop: true, volume: 0.3 });
     ambientSound.play();
     trashSound = this.sound.add('trashSound', { volume: 0.5 });
 
-    // Rocks
+    // Rocks (clickable logs/mud patches)
     for (let i = 0; i < totalRocks; i++) {
         const randX = Phaser.Math.FloatBetween(0.1, 0.9);
         const randY = Phaser.Math.FloatBetween(0.3, 0.8);
@@ -146,10 +196,8 @@ function create() {
 
         rocks.push(rock);
 
-        // Rock click handler
         rock.on('pointerdown', () => {
             if (Phaser.Math.Distance.Between(player.x, player.y, rock.x, rock.y) < 60) {
-                // Randomly choose trash (20%) or bug (80%)
                 let isTrash = Phaser.Math.Between(1, 100) <= 20;
                 let content;
                 if(isTrash) {
@@ -164,16 +212,16 @@ function create() {
                     collectedBugs.push(content.name);
                 }
 
-                rock.destroy(); // remove rock
+                rock.disableInteractive();
+                rock.destroy();
                 scoreText.setText('Score: ' + score);
-                updateExplorer(content); // update explorer panel
+                updateExplorer(content);
                 clickedCount++;
                 if(clickedCount >= totalRocks) showLevelSummary();
             } else console.log('Move closer to flip the rock!');
         });
     }
 
-    // Handle window resize
     window.addEventListener('resize', resizeGame);
 }
 
@@ -201,7 +249,7 @@ function resizeGame() {
     titleBg.setPosition(w/2,0);
     titleText.setPosition(w/2,8);
 
-    bushes.forEach((b,i)=> envSprites[i].setPosition(w*b.x, h*b.y));
+    vegetation.forEach((b,i)=> envSprites[i].setPosition(w*b.x, h*b.y));
     rocks.forEach(r => { if(r.active) r.setPosition(r.x/w * w, r.y/h * h); });
     player.setPosition(w/2,h*0.8);
 }
@@ -216,10 +264,9 @@ function updateExplorer(item) {
 }
 
 // -------------------------
-// Level Summary with Optional Feedback
+// Level Summary
 // -------------------------
 function showLevelSummary() {
-    // Build the summary text
     let summary = `Level Complete!\nScore: ${score}\n\nBugs Collected:\n`;
     
     const bugCounts = collectedBugs.reduce((acc, name) => {
@@ -232,31 +279,18 @@ function showLevelSummary() {
     }
 
     summary += `\nTrash Collected:\n`;
-    trashItems.forEach(t => summary += `- ${t.name} (negative points)\n`);
+    flippedTrash.forEach(t => summary += `- ${t}\n`);
 
-    // Show the alert summary
     alert(summary);
 
-    // Ask for feedback
     const wantsFeedback = confirm("Would you like to provide feedback on this level? Click OK to go to the feedback form, or Cancel to continue playing.");
 
     if (wantsFeedback) {
-        // Open the Google Form in a new tab
         window.open(
             "https://docs.google.com/forms/d/e/1FAIpQLScFHSVlx0Fp4j5Kp8qVK7krCadWA7juq-U34Pt_ZWN8IUARKw/viewform?usp=sf_link",
             "_blank"
         );
     } else {
-        // Reload the page to reset the level
         window.location.reload();
     }
 }
-
-
-
-
-
-
-
-
-
