@@ -234,7 +234,7 @@ function create() {
         const log = this.physics.add.sprite(
             w*pos.x, h*pos.y, 'log'
         )
-        .setScale(Phaser.Math.FloatBetween(0.25,0.35))
+        .setScale(Phaser.Math.FloatBetween(0.15,0.25))
         .setInteractive()
         .setDepth(2);
         logs.push(log);
@@ -324,4 +324,5 @@ function showLevelSummary(){
     alert(`Level Complete!\nScore: ${score}`);
     window.location.reload();
 }
+
 
