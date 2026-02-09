@@ -59,7 +59,7 @@ const macroinvertebrates = [
 const trashItems = [
     { key:'plasticBag', sprite:'plasticBag.png', name:'Plastic Bag', points:-6,
       blurb:'Plastic bags can smother wetland plants and trap wildlife.' },
-    { key:'foamCup', sprite:'foamCup.png', name:'Foam Cup', points:-5,
+    { key:'styrofoam', sprite:'styrofoam.png', name:'Foam Cup', points:-5,
       blurb:'Foam breaks into tiny pieces eaten by wildlife.' },
     { key:'fishingLine', sprite:'fishingLine.png', name:'Fishing Line', points:-7,
       blurb:'Fishing line can entangle birds, turtles, and amphibians.' },
@@ -321,6 +321,7 @@ function showLevelSummary(){
     alert(`Level Complete!\nScore: ${score}`);
     window.location.reload();
 }
+
 
 
 
