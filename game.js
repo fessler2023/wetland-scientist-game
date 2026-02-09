@@ -124,10 +124,10 @@ function create() {
         .setRotation(Phaser.Math.FloatBetween(-0.1,0.1));
     }
     // 🌳 Tree stumps (decorative)
-for(let i = 0; i < 8; i++){  // adjust the number for density
+for(let i = 0; i < 5; i++){  // adjust the number for density
     const x = Phaser.Math.FloatBetween(0.1, 0.9);
     const y = Phaser.Math.FloatBetween(0.4, 0.85);
-    const scale = Phaser.Math.FloatBetween(0.15, 0.3);
+    const scale = Phaser.Math.FloatBetween(0.45, 0.6);
 
     this.add.image(w * x, h * y, 'treestump')
         .setScale(scale)
@@ -247,5 +247,6 @@ function showLevelSummary(){
     alert(`Level Complete!\nScore: ${score}`);
     window.location.reload();
 }
+
 
 
