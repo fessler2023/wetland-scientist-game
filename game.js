@@ -24,16 +24,16 @@ const game = new Phaser.Game(config);
 // -------------------------
 // Globals
 // -------------------------
-let player, cursors; 
-let rocks = [], envSprites = []; 
-let score = 0, scoreText; 
-let titleText, titleBg; 
-let rockFlipSound, ambientSound, trashSound; 
+let player, cursors;
+let rocks = [], logs = [], lilypads = [], envSprites = [];
+let score = 0, scoreText;
+let titleText, titleBg;
+let rockFlipSound, ambientSound, trashSound;
 
-let clickedCount = 0; 
-let totalRocks = 10; 
-let collectedBugs = []; 
-let flippedTrash = []; 
+let clickedCount = 0;
+let totalRocks = 10;
+let collectedBugs = [];
+let flippedTrash = [];
 
 // -------------------------
 // Wetland Critters
@@ -85,8 +85,9 @@ function preload() {
     this.load.image('tree','tree.png'); 
     this.load.image('cattail','cattail.png');
     this.load.image('marshWater','marshWater.png');
-    this.load.image('treestump', 'treestump.png');
-
+    this.load.image('treestump','treestump.png');
+    this.load.image('log','log.png');
+    this.load.image('lilypad','lilypad.png');
 
     vegetation.forEach(v => this.load.image(v.key, v.key + '.png'));
     macroinvertebrates.forEach(c => this.load.image(c.key,c.sprite));
@@ -123,18 +124,19 @@ function create() {
         .setDepth(0)
         .setRotation(Phaser.Math.FloatBetween(-0.1,0.1));
     }
-    // 🌳 Tree stumps (decorative)
-for(let i = 0; i < 5; i++){  // adjust the number for density
-    const x = Phaser.Math.FloatBetween(0.1, 0.9);
-    const y = Phaser.Math.FloatBetween(0.4, 0.85);
-    const scale = Phaser.Math.FloatBetween(0.45, 0.6);
 
-    this.add.image(w * x, h * y, 'treestump')
-        .setScale(scale)
-        .setOrigin(0.5, 1)  // so it sits on the ground
-        .setDepth(1);       // in front of water but behind player
-}
-
+    // 🌳 Tree stumps
+    for(let i=0;i<4;i++){
+        this.add.image(
+            w*Phaser.Math.FloatBetween(0.1,0.9),
+            h*Phaser.Math.FloatBetween(0.4,0.85),
+            'treestump'
+        )
+        .setScale(Phaser.Math.FloatBetween(0.45,0.6))
+        .setOrigin(0.5,1)
+        .setDepth(1)
+        .setRotation(Phaser.Math.FloatBetween(-0.1,0.1));
+    }
 
     // 🌾 Dense cattails (scenery)
     for(let i=0;i<30;i++){
@@ -175,7 +177,13 @@ for(let i = 0; i < 5; i++){  // adjust the number for density
     ambientSound.play();
     trashSound = this.sound.add('trashSound',{volume:0.5});
 
-    // Rocks / Logs
+    // -------------------------
+    // Rocks / Logs / Lilypads (clickable)
+    // -------------------------
+
+    const clickableObjects = [];
+
+    // Rocks
     for(let i=0;i<totalRocks;i++){
         const rock = this.physics.add.sprite(
             w*Phaser.Math.FloatBetween(0.1,0.9),
@@ -185,12 +193,43 @@ for(let i = 0; i < 5; i++){  // adjust the number for density
         .setScale(Phaser.Math.FloatBetween(0.25,0.35))
         .setInteractive()
         .setDepth(2);
-
         rocks.push(rock);
+        clickableObjects.push(rock);
+    }
 
-        rock.on('pointerdown',()=>{
-            if(Phaser.Math.Distance.Between(player.x,player.y,rock.x,rock.y)<60){
-                let isTrash = Phaser.Math.Between(1,100)<=20;
+    // Logs
+    for(let i=0;i<5;i++){
+        const log = this.physics.add.sprite(
+            w*Phaser.Math.FloatBetween(0.1,0.9),
+            h*Phaser.Math.FloatBetween(0.4,0.8),
+            'log'
+        )
+        .setScale(Phaser.Math.FloatBetween(0.25,0.35))
+        .setInteractive()
+        .setDepth(2);
+        logs.push(log);
+        clickableObjects.push(log);
+    }
+
+    // Lilypads
+    for(let i=0;i<4;i++){
+        const pad = this.physics.add.sprite(
+            w*Phaser.Math.FloatBetween(0.2,0.8),
+            h*Phaser.Math.FloatBetween(0.5,0.75),
+            'lilypad'
+        )
+        .setScale(Phaser.Math.FloatBetween(0.2,0.35))
+        .setInteractive()
+        .setDepth(2);
+        lilypads.push(pad);
+        clickableObjects.push(pad);
+    }
+
+    // Add interaction for all clickable objects
+    clickableObjects.forEach(obj => {
+        obj.on('pointerdown', () => {
+            if(Phaser.Math.Distance.Between(player.x, player.y, obj.x, obj.y) < 60){
+                let isTrash = Phaser.Math.Between(1,100) <= 20;
                 let content;
                 if(isTrash){
                     content = Phaser.Utils.Array.GetRandom(trashItems);
@@ -203,14 +242,15 @@ for(let i = 0; i < 5; i++){  // adjust the number for density
                     score += 10;
                     collectedBugs.push(content.name);
                 }
-                rock.disableInteractive();
-                rock.destroy();
+                obj.disableInteractive();
+                obj.destroy();
                 scoreText.setText('Score: '+score);
                 updateExplorer(content);
-                if(++clickedCount>=totalRocks) showLevelSummary();
+                clickedCount++;
+                if(clickedCount >= clickableObjects.length) showLevelSummary();
             }
         });
-    }
+    });
 
     window.addEventListener('resize',resizeGame);
 }
@@ -247,6 +287,4 @@ function showLevelSummary(){
     alert(`Level Complete!\nScore: ${score}`);
     window.location.reload();
 }
-
-
 
