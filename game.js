@@ -85,6 +85,8 @@ function preload() {
     this.load.image('tree','tree.png'); 
     this.load.image('cattail','cattail.png');
     this.load.image('marshWater','marshWater.png');
+    this.load.image('treestump', 'treestump.png');
+
 
     vegetation.forEach(v => this.load.image(v.key, v.key + '.png'));
     macroinvertebrates.forEach(c => this.load.image(c.key,c.sprite));
@@ -121,6 +123,18 @@ function create() {
         .setDepth(0)
         .setRotation(Phaser.Math.FloatBetween(-0.1,0.1));
     }
+    // 🌳 Tree stumps (decorative)
+for(let i = 0; i < 8; i++){  // adjust the number for density
+    const x = Phaser.Math.FloatBetween(0.1, 0.9);
+    const y = Phaser.Math.FloatBetween(0.4, 0.85);
+    const scale = Phaser.Math.FloatBetween(0.15, 0.3);
+
+    this.add.image(w * x, h * y, 'treestump')
+        .setScale(scale)
+        .setOrigin(0.5, 1)  // so it sits on the ground
+        .setDepth(1);       // in front of water but behind player
+}
+
 
     // 🌾 Dense cattails (scenery)
     for(let i=0;i<30;i++){
@@ -233,4 +247,5 @@ function showLevelSummary(){
     alert(`Level Complete!\nScore: ${score}`);
     window.location.reload();
 }
+
 
