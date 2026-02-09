@@ -13,7 +13,7 @@ const config = {
     type: Phaser.AUTO, 
     width: window.innerWidth, 
     height: window.innerHeight, 
-    backgroundColor: '#6B8E6E', // Wetland green
+    backgroundColor: '#6B8E6E', 
     physics: { default: 'arcade', arcade: { debug: false } }, 
     scene: { preload, create, update }, 
     scale: { mode: Phaser.Scale.RESIZE, autoCenter: Phaser.Scale.CENTER_BOTH }
@@ -79,7 +79,7 @@ const vegetation = [
 // -------------------------
 // Helper function for non-overlapping positions
 // -------------------------
-function getNonOverlappingPosition(existingObjects, widthRange, heightRange, minDistance = 0.08, maxAttempts = 20) {
+function getFreePosition(existingPositions, widthRange, heightRange, minDistance = 0.08, maxAttempts = 50) {
     let attempt = 0;
     let pos = { x: 0, y: 0 };
     let safe = false;
@@ -89,9 +89,9 @@ function getNonOverlappingPosition(existingObjects, widthRange, heightRange, min
         pos.y = Phaser.Math.FloatBetween(heightRange.min, heightRange.max);
         safe = true;
 
-        for (let obj of existingObjects) {
-            const dx = pos.x - obj.x;
-            const dy = pos.y - obj.y;
+        for (let p of existingPositions) {
+            const dx = pos.x - p.x;
+            const dy = pos.y - p.y;
             const distance = Math.sqrt(dx*dx + dy*dy);
             if(distance < minDistance) {
                 safe = false;
@@ -157,30 +157,29 @@ function create() {
     // -------------------------
     // Tree stumps
     // -------------------------
+    const occupiedPositions = [];
     for(let i=0;i<4;i++){
-        this.add.image(
-            w*Phaser.Math.FloatBetween(0.1,0.9),
-            h*Phaser.Math.FloatBetween(0.4,0.85),
-            'treestump'
-        )
-        .setScale(Phaser.Math.FloatBetween(0.45,0.6))
-        .setOrigin(0.5,1)
-        .setDepth(1)
-        .setRotation(Phaser.Math.FloatBetween(-0.1,0.1));
+        const x = Phaser.Math.FloatBetween(0.1,0.9);
+        const y = Phaser.Math.FloatBetween(0.4,0.85);
+        this.add.image(w*x, h*y, 'treestump')
+            .setScale(Phaser.Math.FloatBetween(0.45,0.6))
+            .setOrigin(0.5,1)
+            .setDepth(1)
+            .setRotation(Phaser.Math.FloatBetween(-0.1,0.1));
+        occupiedPositions.push({x:x, y:y}); // add to occupied positions
     }
 
     // -------------------------
-    // Dense cattails (scenery)
+    // Dense cattails
     // -------------------------
     for(let i=0;i<30;i++){
-        this.add.image(
-            w*Phaser.Math.FloatBetween(0.05,0.95),
-            h*Phaser.Math.FloatBetween(0.3,0.9),
-            'cattail'
-        )
-        .setScale(Phaser.Math.FloatBetween(0.14,0.22))
-        .setOrigin(0.5,1)
-        .setDepth(1);
+        const x = Phaser.Math.FloatBetween(0.05,0.95);
+        const y = Phaser.Math.FloatBetween(0.3,0.9);
+        this.add.image(w*x, h*y, 'cattail')
+            .setScale(Phaser.Math.FloatBetween(0.14,0.22))
+            .setOrigin(0.5,1)
+            .setDepth(1);
+        occupiedPositions.push({x:x, y:y}); // avoid placing clickables here
     }
 
     // Vegetation array
@@ -190,6 +189,7 @@ function create() {
             .setOrigin(0.5,1)
             .setDepth(1);
         envSprites.push(s);
+        occupiedPositions.push({x: obj.x, y: obj.y});
     });
 
     // Trees along top
@@ -217,44 +217,41 @@ function create() {
 
     // Rocks
     for(let i=0;i<totalRocks;i++){
-        const pos = getNonOverlappingPosition(clickableObjects, {min:0.1,max:0.9}, {min:0.3,max:0.8});
-        const rock = this.physics.add.sprite(
-            w*pos.x, h*pos.y, 'rock'
-        )
-        .setScale(Phaser.Math.FloatBetween(0.25,0.35))
-        .setInteractive()
-        .setDepth(2);
-        rocks.push(rock);
+        const pos = getFreePosition(occupiedPositions, {min:0.1,max:0.9}, {min:0.3,max:0.8}, 0.08);
+        const rock = this.physics.add.sprite(w*pos.x, h*pos.y, 'rock')
+            .setScale(Phaser.Math.FloatBetween(0.25,0.35))
+            .setInteractive()
+            .setDepth(2);
         clickableObjects.push(rock);
+        rocks.push(rock);
+        occupiedPositions.push(pos);
     }
 
     // Logs
     for(let i=0;i<5;i++){
-        const pos = getNonOverlappingPosition(clickableObjects, {min:0.1,max:0.9}, {min:0.4,max:0.8});
-        const log = this.physics.add.sprite(
-            w*pos.x, h*pos.y, 'log'
-        )
-        .setScale(Phaser.Math.FloatBetween(0.15,0.25))
-        .setInteractive()
-        .setDepth(2);
-        logs.push(log);
+        const pos = getFreePosition(occupiedPositions, {min:0.1,max:0.9}, {min:0.4,max:0.8}, 0.08);
+        const log = this.physics.add.sprite(w*pos.x, h*pos.y, 'log')
+            .setScale(Phaser.Math.FloatBetween(0.25,0.35))
+            .setInteractive()
+            .setDepth(2);
         clickableObjects.push(log);
+        logs.push(log);
+        occupiedPositions.push(pos);
     }
 
     // Lilypads
     for(let i=0;i<4;i++){
-        const pos = getNonOverlappingPosition(clickableObjects, {min:0.2,max:0.8}, {min:0.5,max:0.75});
-        const pad = this.physics.add.sprite(
-            w*pos.x, h*pos.y, 'lilypad'
-        )
-        .setScale(Phaser.Math.FloatBetween(0.1,0.2))
-        .setInteractive()
-        .setDepth(2);
-        lilypads.push(pad);
+        const pos = getFreePosition(occupiedPositions, {min:0.2,max:0.8}, {min:0.5,max:0.75}, 0.08);
+        const pad = this.physics.add.sprite(w*pos.x, h*pos.y, 'lilypad')
+            .setScale(0.15) // smaller size
+            .setInteractive()
+            .setDepth(2);
         clickableObjects.push(pad);
+        lilypads.push(pad);
+        occupiedPositions.push(pos);
     }
 
-    // Interaction for all clickable objects
+    // Interaction for all clickables
     clickableObjects.forEach(obj => {
         obj.on('pointerdown', () => {
             if(Phaser.Math.Distance.Between(player.x, player.y, obj.x, obj.y) < 60){
@@ -324,8 +321,4 @@ function showLevelSummary(){
     alert(`Level Complete!\nScore: ${score}`);
     window.location.reload();
 }
-
-
-
-
 
