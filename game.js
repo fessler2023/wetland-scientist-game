@@ -24,16 +24,16 @@ const game = new Phaser.Game(config);
 // -------------------------
 // Globals
 // -------------------------
-let player, cursors;
-let rocks = [], logs = [], lilypads = [], envSprites = [];
-let score = 0, scoreText;
-let titleText, titleBg;
-let rockFlipSound, ambientSound, trashSound;
+let player, cursors; 
+let rocks = [], envSprites = []; 
+let score = 0, scoreText; 
+let titleText, titleBg; 
+let rockFlipSound, ambientSound, trashSound; 
 
-let clickedCount = 0;
-let totalRocks = 10;
-let collectedBugs = [];
-let flippedTrash = [];
+let clickedCount = 0; 
+let totalRocks = 10; 
+let collectedBugs = []; 
+let flippedTrash = []; 
 
 // -------------------------
 // Wetland Critters
@@ -54,7 +54,7 @@ const macroinvertebrates = [
 ];
 
 // -------------------------
-// Trash Items
+// Trash
 // -------------------------
 const trashItems = [
     { key:'plasticBag', sprite:'plasticBag.png', name:'Plastic Bag', points:-6,
@@ -77,34 +77,6 @@ const vegetation = [
 ];
 
 // -------------------------
-// Helper function for non-overlapping positions
-// -------------------------
-function getNonOverlappingPosition(existingObjects, widthRange, heightRange, minDistance = 0.08, maxAttempts = 20) {
-    let attempt = 0;
-    let pos = { x: 0, y: 0 };
-    let safe = false;
-
-    while(!safe && attempt < maxAttempts) {
-        pos.x = Phaser.Math.FloatBetween(widthRange.min, widthRange.max);
-        pos.y = Phaser.Math.FloatBetween(heightRange.min, heightRange.max);
-        safe = true;
-
-        for (let obj of existingObjects) {
-            const dx = pos.x - obj.x;
-            const dy = pos.y - obj.y;
-            const distance = Math.sqrt(dx*dx + dy*dy);
-            if(distance < minDistance) {
-                safe = false;
-                break;
-            }
-        }
-        attempt++;
-    }
-
-    return pos;
-}
-
-// -------------------------
 // Preload
 // -------------------------
 function preload() {
@@ -113,9 +85,8 @@ function preload() {
     this.load.image('tree','tree.png'); 
     this.load.image('cattail','cattail.png');
     this.load.image('marshWater','marshWater.png');
-    this.load.image('treestump','treestump.png');
-    this.load.image('log','log.png');
-    this.load.image('lilypad','lilypad.png');
+    this.load.image('treestump', 'treestump.png');
+
 
     vegetation.forEach(v => this.load.image(v.key, v.key + '.png'));
     macroinvertebrates.forEach(c => this.load.image(c.key,c.sprite));
@@ -137,11 +108,10 @@ function create() {
     titleBg = this.add.rectangle(w/2,0,w,40,0x000000,0.4).setOrigin(0.5,0).setDepth(10);
     titleText = this.add.text(w/2,8,'The Adventures of Little Doug — Wetland Explorer',
         {font:'22px Arial',fill:'#fff',fontStyle:'bold'}).setOrigin(0.5,0).setDepth(11);
+
     scoreText = this.add.text(10,50,'Score: 0',{font:'18px Arial',fill:'#fff'}).setDepth(11);
 
-    // -------------------------
-    // Marsh water pockets
-    // -------------------------
+    // 🌊 Marsh water pockets
     for(let i=0;i<6;i++){
         this.add.image(
             w*Phaser.Math.FloatBetween(0.15,0.85),
@@ -153,25 +123,20 @@ function create() {
         .setDepth(0)
         .setRotation(Phaser.Math.FloatBetween(-0.1,0.1));
     }
+    // 🌳 Tree stumps (decorative)
+for(let i = 0; i < 5; i++){  // adjust the number for density
+    const x = Phaser.Math.FloatBetween(0.1, 0.9);
+    const y = Phaser.Math.FloatBetween(0.4, 0.85);
+    const scale = Phaser.Math.FloatBetween(0.45, 0.6);
 
-    // -------------------------
-    // Tree stumps
-    // -------------------------
-    for(let i=0;i<4;i++){
-        this.add.image(
-            w*Phaser.Math.FloatBetween(0.1,0.9),
-            h*Phaser.Math.FloatBetween(0.4,0.85),
-            'treestump'
-        )
-        .setScale(Phaser.Math.FloatBetween(0.45,0.6))
-        .setOrigin(0.5,1)
-        .setDepth(1)
-        .setRotation(Phaser.Math.FloatBetween(-0.1,0.1));
-    }
+    this.add.image(w * x, h * y, 'treestump')
+        .setScale(scale)
+        .setOrigin(0.5, 1)  // so it sits on the ground
+        .setDepth(1);       // in front of water but behind player
+}
 
-    // -------------------------
-    // Dense cattails (scenery)
-    // -------------------------
+
+    // 🌾 Dense cattails (scenery)
     for(let i=0;i<30;i++){
         this.add.image(
             w*Phaser.Math.FloatBetween(0.05,0.95),
@@ -183,7 +148,7 @@ function create() {
         .setDepth(1);
     }
 
-    // Vegetation array
+    // Anchored vegetation
     vegetation.forEach(obj=>{
         const s = this.add.image(w*obj.x,h*obj.y,obj.key)
             .setScale(obj.scale)
@@ -192,7 +157,7 @@ function create() {
         envSprites.push(s);
     });
 
-    // Trees along top
+    // Trees
     for(let i=0;i<24;i++){
         this.add.image(w*Math.random(),h*0.05,'tree')
             .setScale(Phaser.Math.FloatBetween(0.5,0.7))
@@ -210,55 +175,22 @@ function create() {
     ambientSound.play();
     trashSound = this.sound.add('trashSound',{volume:0.5});
 
-    // -------------------------
-    // Clickable objects: rocks, logs, lily pads
-    // -------------------------
-    const clickableObjects = [];
-
-    // Rocks
+    // Rocks / Logs
     for(let i=0;i<totalRocks;i++){
-        const pos = getNonOverlappingPosition(clickableObjects, {min:0.1,max:0.9}, {min:0.3,max:0.8});
         const rock = this.physics.add.sprite(
-            w*pos.x, h*pos.y, 'rock'
+            w*Phaser.Math.FloatBetween(0.1,0.9),
+            h*Phaser.Math.FloatBetween(0.3,0.8),
+            'rock'
         )
         .setScale(Phaser.Math.FloatBetween(0.25,0.35))
         .setInteractive()
         .setDepth(2);
+
         rocks.push(rock);
-        clickableObjects.push({x: pos.x, y: pos.y});
-    }
 
-    // Logs
-    for(let i=0;i<5;i++){
-        const pos = getNonOverlappingPosition(clickableObjects, {min:0.1,max:0.9}, {min:0.4,max:0.8});
-        const log = this.physics.add.sprite(
-            w*pos.x, h*pos.y, 'log'
-        )
-        .setScale(Phaser.Math.FloatBetween(0.25,0.35))
-        .setInteractive()
-        .setDepth(2);
-        logs.push(log);
-        clickableObjects.push({x: pos.x, y: pos.y});
-    }
-
-    // Lilypads
-    for(let i=0;i<4;i++){
-        const pos = getNonOverlappingPosition(clickableObjects, {min:0.2,max:0.8}, {min:0.5,max:0.75});
-        const pad = this.physics.add.sprite(
-            w*pos.x, h*pos.y, 'lilypad'
-        )
-        .setScale(Phaser.Math.FloatBetween(0.2,0.35))
-        .setInteractive()
-        .setDepth(2);
-        lilypads.push(pad);
-        clickableObjects.push({x: pos.x, y: pos.y});
-    }
-
-    // Interaction for all clickables
-    clickableObjects.forEach(obj => {
-        obj.on('pointerdown', () => {
-            if(Phaser.Math.Distance.Between(player.x, player.y, obj.x*w, obj.y*h) < 60){
-                let isTrash = Phaser.Math.Between(1,100) <= 20;
+        rock.on('pointerdown',()=>{
+            if(Phaser.Math.Distance.Between(player.x,player.y,rock.x,rock.y)<60){
+                let isTrash = Phaser.Math.Between(1,100)<=20;
                 let content;
                 if(isTrash){
                     content = Phaser.Utils.Array.GetRandom(trashItems);
@@ -271,21 +203,18 @@ function create() {
                     score += 10;
                     collectedBugs.push(content.name);
                 }
-                obj.disableInteractive();
-                obj.destroy();
+                rock.disableInteractive();
+                rock.destroy();
                 scoreText.setText('Score: '+score);
                 updateExplorer(content);
-                clickedCount++;
-                if(clickedCount >= clickableObjects.length) showLevelSummary();
+                if(++clickedCount>=totalRocks) showLevelSummary();
             }
         });
-    });
+    }
 
     window.addEventListener('resize',resizeGame);
 }
 
-// -------------------------
-// Update
 // -------------------------
 function update(){
     player.setVelocity(0);
@@ -297,8 +226,6 @@ function update(){
 }
 
 // -------------------------
-// Resize Handler
-// -------------------------
 function resizeGame(){
     const w=window.innerWidth,h=window.innerHeight;
     game.scale.resize(w,h);
@@ -309,8 +236,6 @@ function resizeGame(){
 }
 
 // -------------------------
-// Explorer Panel Update
-// -------------------------
 function updateExplorer(item){
     explorerImage.src=item.sprite;
     explorerName.innerText=item.name;
@@ -318,10 +243,10 @@ function updateExplorer(item){
 }
 
 // -------------------------
-// Level Summary
-// -------------------------
 function showLevelSummary(){
     alert(`Level Complete!\nScore: ${score}`);
     window.location.reload();
 }
+
+
 
