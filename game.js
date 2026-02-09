@@ -13,7 +13,7 @@ const config = {
     type: Phaser.AUTO, 
     width: window.innerWidth, 
     height: window.innerHeight, 
-    backgroundColor: '#6B8E6E',
+    backgroundColor: '#6B8E6E', // Wetland green
     physics: { default: 'arcade', arcade: { debug: false } }, 
     scene: { preload, create, update }, 
     scale: { mode: Phaser.Scale.RESIZE, autoCenter: Phaser.Scale.CENTER_BOTH }
@@ -31,7 +31,7 @@ let titleText, titleBg;
 let rockFlipSound, ambientSound, trashSound; 
 
 let clickedCount = 0; 
-let totalRocks = 10;
+let totalRocks = 10; 
 let collectedBugs = []; 
 let flippedTrash = []; 
 
@@ -82,12 +82,13 @@ const vegetation = [
 function preload() {
     this.load.image('player','player.png');
     this.load.image('rock','rock.png');
-    this.load.image('tree','tree.png');
+    this.load.image('tree','tree.png'); 
+    this.load.image('cattail','cattail.png');
     this.load.image('marshWater','marshWater.png');
 
-    vegetation.forEach(v=>this.load.image(v.key, v.key+'.png'));
-    macroinvertebrates.forEach(c=>this.load.image(c.key,c.sprite));
-    trashItems.forEach(t=>this.load.image(t.key,t.sprite));
+    vegetation.forEach(v => this.load.image(v.key, v.key + '.png'));
+    macroinvertebrates.forEach(c => this.load.image(c.key,c.sprite));
+    trashItems.forEach(t => this.load.image(t.key,t.sprite));
 
     this.load.audio('rockFlip','rockFlip.wav');
     this.load.audio('ambientWetland','wetlandAmbience.mp3');
@@ -108,7 +109,7 @@ function create() {
 
     scoreText = this.add.text(10,50,'Score: 0',{font:'18px Arial',fill:'#fff'}).setDepth(11);
 
-    // 🌊 Marsh Water Pockets
+    // 🌊 Marsh water pockets
     for(let i=0;i<6;i++){
         this.add.image(
             w*Phaser.Math.FloatBetween(0.15,0.85),
@@ -121,7 +122,7 @@ function create() {
         .setRotation(Phaser.Math.FloatBetween(-0.1,0.1));
     }
 
-    // 🌾 Dense Cattails (scenery)
+    // 🌾 Dense cattails (scenery)
     for(let i=0;i<30;i++){
         this.add.image(
             w*Phaser.Math.FloatBetween(0.05,0.95),
@@ -188,6 +189,7 @@ function create() {
                     score += 10;
                     collectedBugs.push(content.name);
                 }
+                rock.disableInteractive();
                 rock.destroy();
                 scoreText.setText('Score: '+score);
                 updateExplorer(content);
