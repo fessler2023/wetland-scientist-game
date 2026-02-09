@@ -1,11 +1,11 @@
 /*
 ========================================================================
-Program: The Adventures of Little Doug - Level 1
+Program: The Adventures of Little Doug - Level 2
 Author: Douglas Fessler
 Date: 2026-01-25
 Description: 
     This is an educational interactive game using Phaser 3. The player 
-    explores a stream environment, flips rocks to discover macroinvertebrates 
+    explores a wetland environment, flips rocks to discover macroinvertebrates 
     (bugs that indicate water quality) or trash items. Finding bugs 
     increases the score, while trash reduces it. Players learn about 
     stream ecology, pollution, and the importance of keeping waterways clean.
@@ -19,7 +19,7 @@ const config = {
     type: Phaser.AUTO, // Phaser chooses WebGL or Canvas automatically
     width: window.innerWidth, // Full browser width
     height: window.innerHeight, // Full browser height
-    backgroundColor: '#5DADE2', // Sky blue background
+    backgroundColor: '#6B8E6E', // Sky blue background
     physics: { default: 'arcade', arcade: { debug: false } }, // Arcade physics engine, no debug
     scene: { preload, create, update }, // Game lifecycle methods
     scale: { mode: Phaser.Scale.RESIZE, autoCenter: Phaser.Scale.CENTER_BOTH } // Resize to fit window, center
@@ -104,7 +104,7 @@ function create() {
 
     // Title Bar
     titleBg = this.add.rectangle(w/2, 0, w, 40, 0x000000, 0.4).setOrigin(0.5,0).setDepth(10);
-    titleText = this.add.text(w/2, 8, 'The Adventures of Little Doug', { font:'22px Arial', fill:'#fff', fontStyle:'bold' })
+    titleText = this.add.text(w/2, 8, 'The Adventures of Little Doug -Wetland Explorer', { font:'22px Arial', fill:'#fff', fontStyle:'bold' })
         .setOrigin(0.5,0).setDepth(11);
 
     // Score Text
@@ -251,6 +251,7 @@ function showLevelSummary() {
         window.location.reload();
     }
 }
+
 
 
 
