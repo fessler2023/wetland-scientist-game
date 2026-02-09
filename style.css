@@ -1,0 +1,64 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    background: #000;
+    font-family: Arial, sans-serif;
+    color: #fff;
+}
+
+/* Explorer / Field Journal Panel */
+#explorer {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    width: 270px;           /* wider */
+    height: 340px;          /* taller */
+    padding: 10px;
+    background: rgba(0,0,0,0.7);
+    border: 2px solid #fff;
+    border-radius: 8px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Field Journal Title */
+#explorer h2 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+    text-align: center;
+    border-bottom: 1px solid #fff;
+    width: 100%;
+    padding-bottom: 4px;
+}
+
+/* Insect Image */
+#explorer img {
+    width: 140px;
+    height: 140px;
+    background-color: #fff;   /* white background for image */
+    image-rendering: pixelated;
+    display: block;
+    margin-bottom: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Insect Name */
+#explorer h3 {
+    margin: 0 0 4px 0;
+    font-size: 16px;
+    text-align: center;
+    color: #fff;
+}
+
+/* Insect Blurb */
+#explorer p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.2;
+    text-align: center;
+    color: #fff;
+}
+
