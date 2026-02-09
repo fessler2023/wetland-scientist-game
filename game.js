@@ -141,7 +141,7 @@ function preload() {
 
     // Sounds
     this.load.audio('rockFlip', 'rockFlip.wav');
-    this.load.audio('ambientWetland', 'wetlandAmbience.wav'); // optional wetland ambient
+    this.load.audio('ambientWetland', 'wetlandAmbience.mp3'); // optional wetland ambient
     this.load.audio('trashSound', 'trash.wav');
 }
 
@@ -294,3 +294,4 @@ function showLevelSummary() {
         window.location.reload();
     }
 }
+
