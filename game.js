@@ -142,7 +142,7 @@ function create() {
     // -------------------------
     // Marsh water pockets
     // -------------------------
-    for(let i=0;i<12;i++){
+    for(let i=0;i<20;i++){
         this.add.image(
             w*Phaser.Math.FloatBetween(0.15,0.85),
             h*Phaser.Math.FloatBetween(0.35,0.75),
@@ -321,4 +321,5 @@ function showLevelSummary(){
     alert(`Level Complete!\nScore: ${score}`);
     window.location.reload();
 }
+
 
