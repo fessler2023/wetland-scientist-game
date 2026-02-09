@@ -219,7 +219,7 @@ function create() {
     for(let i=0;i<totalRocks;i++){
         const pos = getFreePosition(occupiedPositions, {min:0.1,max:0.9}, {min:0.3,max:0.8}, 0.08);
         const rock = this.physics.add.sprite(w*pos.x, h*pos.y, 'rock')
-            .setScale(Phaser.Math.FloatBetween(0.25,0.35))
+            .setScale(Phaser.Math.FloatBetween(0.15,0.25))
             .setInteractive()
             .setDepth(2);
         clickableObjects.push(rock);
@@ -231,7 +231,7 @@ function create() {
     for(let i=0;i<5;i++){
         const pos = getFreePosition(occupiedPositions, {min:0.1,max:0.9}, {min:0.4,max:0.8}, 0.08);
         const log = this.physics.add.sprite(w*pos.x, h*pos.y, 'log')
-            .setScale(Phaser.Math.FloatBetween(0.25,0.35))
+            .setScale(Phaser.Math.FloatBetween(0.15,0.55))
             .setInteractive()
             .setDepth(2);
         clickableObjects.push(log);
@@ -243,7 +243,7 @@ function create() {
     for(let i=0;i<4;i++){
         const pos = getFreePosition(occupiedPositions, {min:0.2,max:0.8}, {min:0.5,max:0.75}, 0.08);
         const pad = this.physics.add.sprite(w*pos.x, h*pos.y, 'lilypad')
-            .setScale(0.15) // smaller size
+            .setScale(0.10) // smaller size
             .setInteractive()
             .setDepth(2);
         clickableObjects.push(pad);
@@ -321,6 +321,7 @@ function showLevelSummary(){
     alert(`Level Complete!\nScore: ${score}`);
     window.location.reload();
 }
+
 
 
 
