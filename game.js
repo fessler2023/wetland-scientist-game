@@ -121,7 +121,7 @@ const trashItems = [
 // Wetland Vegetation (replaces bushes)
 // -------------------------
 const vegetation = [
-    { key: 'cattail', x: 0.85, y: 0.25, scale: 0.35 },
+    { key: 'cattail', x: 0.85, y: 0.25, scale: 0.18 },
     { key: 'cattail', x: 0.75, y: 0.85, scale: 0.35 },
     { key: 'reeds', x: 0.4, y: 0.7, scale: 0.4 },
     { key: 'grass', x: 0.2, y: 0.4, scale: 0.3 }
@@ -294,4 +294,5 @@ function showLevelSummary() {
         window.location.reload();
     }
 }
+
 
