@@ -73,7 +73,7 @@ const trashItems = [
 const vegetation = [
     { key:'cattail', x:0.85, y:0.25, scale:0.18 },
     { key:'reeds', x:0.4, y:0.7, scale:0.35 },
-    { key:'grass', x:0.2, y:0.4, scale:0.25 }
+    //{ key:'grass', x:0.2, y:0.4, scale:0.25 }
 ];
 
 // -------------------------
@@ -321,6 +321,7 @@ function showLevelSummary(){
     alert(`Level Complete!\nScore: ${score}`);
     window.location.reload();
 }
+
 
 
 
