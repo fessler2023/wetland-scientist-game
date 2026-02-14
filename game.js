@@ -100,14 +100,30 @@ const macroinvertebrates = [
 // -------------------------
 const trashItems = [
     { key:'plasticBag', sprite:'plasticBag.png', name:'Plastic Bag', points:-6,
-      blurb:'Plastic bags can smother wetland plants and trap wildlife.' },
+      blurb:'Plastic bags can smother wetland plants and trap turtles, birds, and frogs. As they break down into microplastics, they pollute water that wildlife and humans both depend on.' },
+
     { key:'styrofoam', sprite:'styrofoam.png', name:'Foam Cup', points:-5,
-      blurb:'Foam breaks into tiny pieces eaten by wildlife.' },
+      blurb:'Foam breaks into tiny pieces that animals mistake for food. These particles pollute water and can eventually enter the human water supply and food chain.' },
+
     { key:'fishingLine', sprite:'fishingLine.png', name:'Fishing Line', points:-7,
-      blurb:'Fishing line can entangle birds, turtles, and amphibians.' },
+      blurb:'Discarded fishing line tangles birds, turtles, and amphibians. It does not break down easily and pollutes the same waters people use for recreation and drinking.' },
+
     { key:'oilSheen', sprite:'oilSheen.png', name:'Oil Residue', points:-8,
-      blurb:'Oil pollution blocks oxygen exchange in wetlands.' }
+      blurb:'Oil pollution blocks oxygen in the water and poisons fish, frogs, and insects. Contaminated wetlands reduce natural water filtration that helps keep human water sources clean.' },
+
+    { key:'plasticBottle', sprite:'plasticBottle.png', name:'Plastic Bottle', points:-5,
+      blurb:'Plastic bottles can trap small animals and slowly break into microplastics. These pollutants harm wildlife and can return to humans through drinking water and food.' },
+
+    { key:'aluminumCan', sprite:'aluminumCan.png', name:'Aluminum Can', points:-4,
+      blurb:'Aluminum cans can leach chemicals as they degrade. Polluted water harms wetland ecosystems and reduces the natural filtration that protects human communities.' },
+
+    { key:'glassBottle', sprite:'glassBottle.png', name:'Glass Bottle', points:-6,
+      blurb:'Broken glass injures wildlife and people. Trash in wetlands disrupts habitats and weakens the natural systems that filter and clean our water.' },
+
+    { key:'cigaretteButt', sprite:'cigaretteButt.png', name:'Cigarette Butt', points:-6,
+      blurb:'Cigarette filters contain toxic chemicals that leach into water. These toxins harm fish and amphibians and contaminate water that eventually flows downstream to communities.' }
 ];
+
 
 // -------------------------
 // Vegetation Anchors
@@ -363,6 +379,7 @@ function showLevelSummary(){
     alert(`Level Complete!\nScore: ${score}`);
     window.location.reload();
 }
+
 
 
 
