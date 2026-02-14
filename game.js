@@ -56,7 +56,9 @@ const macroinvertebrates = [
     { key:'woodFrog', sprite:'woodFrog.png', name:'Wood Frog',
       blurb:'Wood frogs breed early in spring and hide in leaf litter outside water.' },
     { key:'americanToad', sprite:'americanToad.png', name:'American Toad',
-      blurb:'American toads are mostly terrestrial but breed in shallow pools.' }
+      blurb:'American toads are mostly terrestrial but breed in shallow pools.' },
+    { key:'paintedTurtle', sprite:'paintedTurtle.png', name:'Painted Turtle',
+      blurb:'Painted turtles often sunbathe on logs and prefer shallow ponds.' }
 ];
 
 // -------------------------
@@ -327,6 +329,7 @@ function showLevelSummary(){
     alert(`Level Complete!\nScore: ${score}`);
     window.location.reload();
 }
+
 
 
 
