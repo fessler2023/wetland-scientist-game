@@ -45,7 +45,7 @@ const macroinvertebrates = [
       blurb:'Damselfly nymphs are sensitive to pollution and common in healthy wetlands.' },
     { key:'divingBeetle', sprite:'divingBeetle.png', name:'Diving Beetle',
       blurb:'Diving beetles trap air bubbles to breathe underwater.' },
-    { key:'waterBoatman', sprite:'waterBoatman.png', name:'Water Boatman',
+    { key:'waterBoatman', sprite:'waterboatman.png', name:'Water Boatman',
       blurb:'Water boatmen help recycle nutrients in wetlands.' },
     { key:'snail', sprite:'snail.png', name:'Freshwater Snail',
       blurb:'Freshwater snails graze on algae and keep wetland waters clear.' },
@@ -323,6 +323,7 @@ function showLevelSummary(){
     alert(`Level Complete!\nScore: ${score}`);
     window.location.reload();
 }
+
 
 
 
