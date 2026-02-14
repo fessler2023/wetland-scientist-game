@@ -52,7 +52,9 @@ const macroinvertebrates = [
     { key:'tadpole', sprite:'tadpole.png', name:'Tadpole',
       blurb:'Tadpoles grow into frogs and toads. Wetlands are critical nurseries.' },
     { key:'springPeeper', sprite:'springpeeper.png', name:'Spring Peeper',
-      blurb:'Spring peepers are tiny chorus frogs whose loud calls signal a healthy wetland ecosystem.' }
+      blurb:'Spring peepers are tiny chorus frogs whose loud calls signal a healthy wetland ecosystem.' },
+    { key:'woodFrog', sprite:'woodFrog.png', name:'Wood Frog',
+      blurb:'Wood frogs breed early in spring and hide in leaf litter outside water.' }
 ];
 
 // -------------------------
@@ -323,6 +325,7 @@ function showLevelSummary(){
     alert(`Level Complete!\nScore: ${score}`);
     window.location.reload();
 }
+
 
 
 
