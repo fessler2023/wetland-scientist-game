@@ -54,7 +54,9 @@ const macroinvertebrates = [
     { key:'springPeeper', sprite:'springpeeper.png', name:'Spring Peeper',
       blurb:'Spring peepers are tiny chorus frogs whose loud calls signal a healthy wetland ecosystem.' },
     { key:'woodFrog', sprite:'woodFrog.png', name:'Wood Frog',
-      blurb:'Wood frogs breed early in spring and hide in leaf litter outside water.' }
+      blurb:'Wood frogs breed early in spring and hide in leaf litter outside water.' },
+    { key:'americanToad', sprite:'americanToad.png', name:'American Toad',
+      blurb:'American toads are mostly terrestrial but breed in shallow pools.' }
 ];
 
 // -------------------------
@@ -325,6 +327,7 @@ function showLevelSummary(){
     alert(`Level Complete!\nScore: ${score}`);
     window.location.reload();
 }
+
 
 
 
