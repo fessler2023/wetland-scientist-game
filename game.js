@@ -40,26 +40,60 @@ let flippedTrash = [];
 // -------------------------
 const macroinvertebrates = [
     { key:'dragonflyNymph', sprite:'dragonflyNymph.png', name:'Dragonfly Nymph',
-      blurb:'Dragonfly nymphs live in still water and are powerful predators of mosquitoes.' },
+      blurb:'Dragonfly nymphs live underwater and eat mosquito larvae. They help control insect populations and indicate healthy wetland water.' },
+
     { key:'damselflyNymph', sprite:'damselflyNymph.png', name:'Damselfly Nymph',
-      blurb:'Damselfly nymphs are sensitive to pollution and common in healthy wetlands.' },
+      blurb:'Damselfly nymphs are sensitive to pollution. Finding them means the water is clean and well-balanced.' },
+
     { key:'divingBeetle', sprite:'divingBeetle.png', name:'Diving Beetle',
-      blurb:'Diving beetles trap air bubbles to breathe underwater.' },
+      blurb:'Diving beetles carry air bubbles underwater and hunt small insects. They help maintain balance in pond ecosystems.' },
+
     { key:'waterBoatman', sprite:'waterboatman.png', name:'Water Boatman',
-      blurb:'Water boatmen help recycle nutrients in wetlands.' },
+      blurb:'Water boatmen feed on algae and organic matter, helping recycle nutrients and keep water clear.' },
+
     { key:'snail', sprite:'snail.png', name:'Freshwater Snail',
-      blurb:'Freshwater snails graze on algae and keep wetland waters clear.' },
+      blurb:'Freshwater snails graze on algae and help filter the water, preventing harmful overgrowth.' },
+
     { key:'tadpole', sprite:'tadpole.png', name:'Tadpole',
-      blurb:'Tadpoles grow into frogs and toads. Wetlands are critical nurseries.' },
+      blurb:'Tadpoles eat algae and grow into frogs or toads. They help keep ponds clean and support amphibian populations.' },
+
     { key:'springPeeper', sprite:'springpeeper.png', name:'Spring Peeper',
-      blurb:'Spring peepers are tiny chorus frogs whose loud calls signal a healthy wetland ecosystem.' },
+      blurb:'Spring peepers are tiny frogs with loud spring calls. They indicate healthy wetlands and help control insects.' },
+
     { key:'woodFrog', sprite:'woodFrog.png', name:'Wood Frog',
-      blurb:'Wood frogs breed early in spring and hide in leaf litter outside water.' },
+      blurb:'Wood frogs breed in temporary pools. Their presence shows a functioning wetland that supports clean seasonal water.' },
+
     { key:'americanToad', sprite:'americanToad.png', name:'American Toad',
-      blurb:'American toads are mostly terrestrial but breed in shallow pools.' },
+      blurb:'American toads eat insects and pests. They thrive in healthy wetlands and signal balanced ecosystems.' },
+
     { key:'paintedTurtle', sprite:'paintedTurtle.png', name:'Painted Turtle',
-      blurb:'Painted turtles often sunbathe on logs and prefer shallow ponds.' }
+      blurb:'Painted turtles eat plants and small animals. They help keep wetlands balanced and depend on clean water habitats.' },
+
+    { key:'greenFrog', sprite:'greenFrog.png', name:'Green Frog',
+      blurb:'Green frogs eat insects and small invertebrates. They are a strong indicator of good water quality.' },
+
+    { key:'northernLeopardFrog', sprite:'northernLeopardFrog.png', name:'Northern Leopard Frog',
+      blurb:'Northern leopard frogs prefer marshy wetlands. Their presence signals clean water and healthy habitat.' },
+
+    { key:'caddisflyLarva', sprite:'caddisflyLarva.png', name:'Caddisfly Larva',
+      blurb:'Caddisfly larvae build tiny cases from sand and sticks. They filter organic material from water and indicate strong water quality.' },
+
+    { key:'mayflyNymph', sprite:'mayflyNymph.png', name:'Mayfly Nymph',
+      blurb:'Mayfly nymphs survive only in clean, oxygen-rich water. They are one of the best indicators of healthy wetlands.' },
+
+    { key:'stoneflyNymph', sprite:'stoneflyNymph.png', name:'Stonefly Nymph',
+      blurb:'Stonefly nymphs are extremely sensitive to pollution. Finding them means the water is very clean and well-oxygenated.' },
+
+    { key:'snappingTurtle', sprite:'snappingTurtle.png', name:'Snapping Turtle',
+      blurb:'Snapping turtles are top wetland predators. They help control fish and invertebrate populations, keeping ecosystems balanced.' },
+
+    { key:'blandingsTurtle', sprite:'blandingsTurtle.png', name:'Blanding’s Turtle',
+      blurb:'Blanding’s turtles depend on healthy marshes and ponds. Their presence indicates strong wetland habitat.' },
+
+    { key:'easternBoxTurtle', sprite:'easternBoxTurtle.png', name:'Eastern Box Turtle',
+      blurb:'Box turtles move between wetlands and forests, helping connect ecosystems and spread plant seeds.' }
 ];
+
 
 // -------------------------
 // Trash Items
@@ -329,6 +363,7 @@ function showLevelSummary(){
     alert(`Level Complete!\nScore: ${score}`);
     window.location.reload();
 }
+
 
 
 
