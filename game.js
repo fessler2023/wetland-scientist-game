@@ -50,7 +50,7 @@ const macroinvertebrates = [
     { key:'snail', sprite:'snail.png', name:'Freshwater Snail',
       blurb:'Freshwater snails graze on algae and keep wetland waters clear.' },
     { key:'tadpole', sprite:'tadpole.png', name:'Tadpole',
-      blurb:'Tadpoles grow into frogs and toads. Wetlands are critical nurseries.' }
+      blurb:'Tadpoles grow into frogs and toads. Wetlands are critical nurseries.' },
     { key:'springPeeper', sprite:'springpeeper.png', name:'Spring Peeper',
       blurb:'Spring peepers are tiny chorus frogs whose loud calls signal a healthy wetland ecosystem.' }
 ];
@@ -323,6 +323,7 @@ function showLevelSummary(){
     alert(`Level Complete!\nScore: ${score}`);
     window.location.reload();
 }
+
 
 
 
