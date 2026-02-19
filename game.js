@@ -81,7 +81,7 @@ const macroinvertebrates = [
     { key:'mayflyNymph', sprite:'mayfly.png', name:'Mayfly Nymph',
       blurb:'Mayfly nymphs survive only in clean, oxygen-rich water. They are one of the best indicators of healthy wetlands.' },
 
-    { key:'stoneflyNymph', sprite:'stoneflyNymph.png', name:'Stonefly Nymph',
+    { key:'stoneflyNymph', sprite:'stonefly.png', name:'Stonefly Nymph',
       blurb:'Stonefly nymphs are extremely sensitive to pollution. Finding them means the water is very clean and well-oxygenated.' },
 
     { key:'snappingTurtle', sprite:'snappingTurtle.png', name:'Snapping Turtle',
@@ -379,6 +379,7 @@ function showLevelSummary(){
     alert(`Level Complete!\nScore: ${score}`);
     window.location.reload();
 }
+
 
 
 
