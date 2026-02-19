@@ -114,7 +114,7 @@ const trashItems = [
     { key:'plasticBottle', sprite:'plasticBottle.png', name:'Plastic Bottle', points:-5,
       blurb:'Plastic bottles can trap small animals and slowly break into microplastics. These pollutants harm wildlife and can return to humans through drinking water and food.' },
 
-    { key:'aluminumCan', sprite:'aluminumCan.png', name:'Aluminum Can', points:-4,
+    { key:'aluminumCan', sprite:'can.png', name:'Aluminum Can', points:-4,
       blurb:'Aluminum cans can leach chemicals as they degrade. Polluted water harms wetland ecosystems and reduces the natural filtration that protects human communities.' },
 
     { key:'glassBottle', sprite:'glassBottle.png', name:'Glass Bottle', points:-6,
@@ -379,6 +379,7 @@ function showLevelSummary(){
     alert(`Level Complete!\nScore: ${score}`);
     window.location.reload();
 }
+
 
 
 
