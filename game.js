@@ -75,10 +75,10 @@ const macroinvertebrates = [
     { key:'northernLeopardFrog', sprite:'northernLeopardFrog.png', name:'Northern Leopard Frog',
       blurb:'Northern leopard frogs prefer marshy wetlands. Their presence signals clean water and healthy habitat.' },
 
-    { key:'caddisfly', sprite:'caddisflyLarva.png', name:'Caddisfly Larva',
+    { key:'caddisflyLarvae', sprite:'caddisfly.png', name:'Caddisfly Larva',
       blurb:'Caddisfly larvae build tiny cases from sand and sticks. They filter organic material from water and indicate strong water quality.' },
 
-    { key:'mayflyNymph', sprite:'mayflyNymph.png', name:'Mayfly Nymph',
+    { key:'mayflyNymph', sprite:'mayfly.png', name:'Mayfly Nymph',
       blurb:'Mayfly nymphs survive only in clean, oxygen-rich water. They are one of the best indicators of healthy wetlands.' },
 
     { key:'stoneflyNymph', sprite:'stoneflyNymph.png', name:'Stonefly Nymph',
@@ -379,6 +379,7 @@ function showLevelSummary(){
     alert(`Level Complete!\nScore: ${score}`);
     window.location.reload();
 }
+
 
 
 
