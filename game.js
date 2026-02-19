@@ -120,7 +120,7 @@ const trashItems = [
     { key:'glassBottle', sprite:'glassBottle.png', name:'Glass Bottle', points:-6,
       blurb:'Broken glass injures wildlife and people. Trash in wetlands disrupts habitats and weakens the natural systems that filter and clean our water.' },
 
-    { key:'cigarette', sprite:'cigaretteButt.png', name:'Cigarette Butt', points:-6,
+    { key:'cigaretteButt', sprite:'cigarette.png', name:'Cigarette Butt', points:-6,
       blurb:'Cigarette filters contain toxic chemicals that leach into water. These toxins harm fish and amphibians and contaminate water that eventually flows downstream to communities.' }
 ];
 
@@ -379,6 +379,7 @@ function showLevelSummary(){
     alert(`Level Complete!\nScore: ${score}`);
     window.location.reload();
 }
+
 
 
 
