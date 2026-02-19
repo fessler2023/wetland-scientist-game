@@ -75,7 +75,7 @@ const macroinvertebrates = [
     { key:'northernLeopardFrog', sprite:'northernLeopardFrog.png', name:'Northern Leopard Frog',
       blurb:'Northern leopard frogs prefer marshy wetlands. Their presence signals clean water and healthy habitat.' },
 
-    { key:'caddisflyLarva', sprite:'caddisflyLarva.png', name:'Caddisfly Larva',
+    { key:'caddisfly', sprite:'caddisflyLarva.png', name:'Caddisfly Larva',
       blurb:'Caddisfly larvae build tiny cases from sand and sticks. They filter organic material from water and indicate strong water quality.' },
 
     { key:'mayflyNymph', sprite:'mayflyNymph.png', name:'Mayfly Nymph',
@@ -120,7 +120,7 @@ const trashItems = [
     { key:'glassBottle', sprite:'glassBottle.png', name:'Glass Bottle', points:-6,
       blurb:'Broken glass injures wildlife and people. Trash in wetlands disrupts habitats and weakens the natural systems that filter and clean our water.' },
 
-    { key:'cigaretteButt', sprite:'cigaretteButt.png', name:'Cigarette Butt', points:-6,
+    { key:'cigarette', sprite:'cigaretteButt.png', name:'Cigarette Butt', points:-6,
       blurb:'Cigarette filters contain toxic chemicals that leach into water. These toxins harm fish and amphibians and contaminate water that eventually flows downstream to communities.' }
 ];
 
@@ -379,6 +379,7 @@ function showLevelSummary(){
     alert(`Level Complete!\nScore: ${score}`);
     window.location.reload();
 }
+
 
 
 
