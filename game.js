@@ -259,7 +259,7 @@ function create() {
 
     // Player
     player = this.physics.add.sprite(w/2,h*0.8,'player')
-        .setScale(0.3).setCollideWorldBounds(true).setDepth(2);
+        .setScale(0.2).setCollideWorldBounds(true).setDepth(2);
     cursors = this.input.keyboard.createCursorKeys();
 
     // Sounds
@@ -379,6 +379,7 @@ function showLevelSummary(){
     alert(`Level Complete!\nScore: ${score}`);
     window.location.reload();
 }
+
 
 
 
